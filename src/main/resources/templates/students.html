@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>Listado de students</title>
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+      <a class="navbar-brand" href="#"> Control de students</a>
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse" studentId="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/students}">Control de students</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <h1>Lista de students</h1>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+          <a th:href="@{/students/create}" class="btn btn-primary btn-sm mb3"
+            >Agregar student</a
+          >
+        </div>
+      </div>
+      <br />
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="student : ${students}">
+            <td th:text="${student.studentId}">Id</td>
+            <td th:text="${student.firstName}">Nombre</td>
+            <td th:text="${student.lastName}">ApellstudentIdo</td>
+            <td th:text="${student.email}">Email</td>
+            <td>
+              <a
+                th:href="@{/students/update/{id}(id=${student.studentId})}"
+                class="btn btn-info"
+                >Editar</a
+              >
+              <a
+                th:href="@{/students/delete/{id}(id=${student.studentId})}"
+                class="btn btn-danger"
+                >Eliminar</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
