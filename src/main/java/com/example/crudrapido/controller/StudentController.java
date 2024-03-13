@@ -27,25 +27,26 @@ public class StudentController {
     public String formCreateStudent(Model modelo) {
         Student student = new Student();
         modelo.addAttribute("student", student);
-        return "crear_student";
-    }
-
-    @PostMapping("/students")
-    public String saveStudent(@ModelAttribute("student") Student student) {
-        studentService.saveOrUpdate(student);
-        return "redirect:/students";
+        return "crear_student"; // nos retorna al archivo crear_student
     }
 
     @GetMapping("/students/update/{id}")
     public String formUpdateStudent(@PathVariable Long id, Model modelo) {
         modelo.addAttribute("student", studentService.getStudent(id));
-        return "editar_student";
+        return "editar_student"; // nos retorna al archivo editar_student
+    }
+
+    @PostMapping("/students")
+    public String saveStudent(@ModelAttribute("student") Student student) {
+        studentService.saveOrUpdate(student);
+        return "redirect:/students"; // redirigiendo a la pantalla principal
     }
 
     @PostMapping("/students/update/{id}")
     public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student,
             Model modelo) {
         Student studentExistente = studentService.getStudent(id);
+
         studentExistente.setStudentId(id);
         studentExistente.setFirstName(student.getFirstName());
         studentExistente.setLastName(student.getLastName());
