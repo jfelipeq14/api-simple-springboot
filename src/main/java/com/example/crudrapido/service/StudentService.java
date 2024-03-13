@@ -1,5 +1,6 @@
 package com.example.crudrapido.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,29 @@ public class StudentService {
     StudentRepository studentRepository;
 
     public List<Student> getStudents() {
-        return studentRepository.findAll();
+        try {
+            return studentRepository.findAll();
+        } catch (Exception e) {
+            List<Student> listStudent = new ArrayList<Student>();
+            return listStudent;
+        }
     }
 
     public Student getStudent(Long id) {
-        return studentRepository.findById(id).get();
+        try {
+            return studentRepository.findById(id).get();
+        } catch (Exception e) {
+            var student = new Student();
+            return student;
+        }
     }
 
     public void saveOrUpdate(Student student) {
-        studentRepository.save(student);
+        try {
+            studentRepository.save(student);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public void delete(Long id) {
