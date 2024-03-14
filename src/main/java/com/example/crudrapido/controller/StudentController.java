@@ -18,62 +18,60 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping({ "/students", "/" })
-    public String listStudents(Model modelo) {
+    public String listStudents(Model model) {
         try {
-            modelo.addAttribute("students", studentService.getStudents());
+            Student student = new Student();
+            model.addAttribute("student", student); // model para crear estudiante
+
+            model.addAttribute("students", studentService.getStudents()); // obtener todos los estudiantes
+
             return "students"; // nos retorna al archivo students
         } catch (Exception e) {
             return ("Error: " + e);
         }
     }
 
-    @GetMapping("/students/create")
-    public String formCreateStudent(Model modelo) {
+    @PostMapping("/students")
+    public String saveOrUpdateStudent(@ModelAttribute("student") Student student) {
         try {
-            Student student = new Student();
-            modelo.addAttribute("student", student);
-            return "crear_student";
+            Student studentExist = studentService.getStudent(student.getId());
+            if (studentExist.getId() != null) {
+                studentExist.setDocument(student.getDocument());
+                studentExist.setFirstName(student.getFirstName());
+                studentExist.setLastName(student.getLastName());
+                studentExist.setEmail(student.getEmail());
+
+                studentService.saveOrUpdate(studentExist);
+            } else {
+                studentService.saveOrUpdate(student);
+            }
+
+            return "redirect:/students";
         } catch (Exception e) {
             return ("Error: " + e);
         }
     }
 
     @GetMapping("/students/update/{id}")
-    public String formUpdateStudent(@PathVariable Long id, Model modelo) {
+    public String updateStudent(@PathVariable Long id, Model model) {
         try {
-            modelo.addAttribute("student", studentService.getStudent(id));
-            return "editar_student";
+            Student student = studentService.getStudent(id);
+            model.addAttribute("student", student);
+            return "students";
         } catch (Exception e) {
             return ("Error: " + e);
         }
     }
 
-    @PostMapping("/students")
-    public String saveStudent(@ModelAttribute("student") Student student) {
+    @GetMapping("/students/search/{document}")
+    public String searchStudent(@PathVariable String document, Model model) {
         try {
-            studentService.saveOrUpdate(student);
-            return "redirect:/students";
+            Student student = studentService.getStudentByDocument(document);
+            model.addAttribute("student", student);
+            return "students";
         } catch (Exception e) {
             return ("Error: " + e);
         }
-    }
-
-    @PostMapping("/students/update/{id}")
-    public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student,
-            Model modelo) {
-        try {
-            Student studentExistente = studentService.getStudent(id);
-            studentExistente.setStudentId(id);
-            studentExistente.setFirstName(student.getFirstName());
-            studentExistente.setLastName(student.getLastName());
-            studentExistente.setEmail(student.getEmail());
-
-            studentService.saveOrUpdate(studentExistente);
-            return "redirect:/students";
-        } catch (Exception e) {
-            return ("Error: " + e);
-        }
-
     }
 
     @GetMapping("/students/delete/{id}")

@@ -32,6 +32,15 @@ public class StudentService {
         }
     }
 
+    public Student getStudentByDocument(String document) {
+        try {
+            return studentRepository.findByDocument(document);
+        } catch (Exception e) {
+            var student = new Student();
+            return student;
+        }
+    }
+
     public void saveOrUpdate(Student student) {
         try {
             studentRepository.save(student);

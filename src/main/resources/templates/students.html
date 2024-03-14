@@ -14,66 +14,111 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/students}">Estudiantes</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarResponsive"
-          aria-controls="navbarResponsive"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+    <div class="container my-5 row justify-content-center">
+      <section class="col-sm-12 col-md-6">
+        <form
+          th:action="@{/students}"
+          th:object="${student}"
+          method="POST"
+          class="w-50 mx-auto rounded shadow p-3"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
+          <fieldset>
+            <legend>Estudiante</legend>
+            <div class="form-group m-2">
+              <label class="form-label"
+                >Documento:
+                <input
+                  type="text"
+                  th:field="*{document}"
+                  class="form-control"
+                  placeholder="Digite su documento"
+                  required
+                />
+              </label>
               <a
-                th:href="@{/students/create}"
-                class="btn btn-primary btn-sm mb3"
-                >Agregar estudiante</a
+                th:href="@{/students/search/{document}(document=${student.document})}"
+                class="btn btn-primary"
+                >Buscar</a
               >
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+            </div>
+            <div class="form-group m-2">
+              <label class="form-label"
+                >Nombres:
+                <input
+                  type="text"
+                  th:field="*{firstName}"
+                  class="form-control"
+                  placeholder="Digite su nombre"
+                  required
+                />
+              </label>
+            </div>
 
-    <div class="container my-5">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellido</th>
-            <th scope="col">Email</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="student : ${students}">
-            <td scope="row" th:text="${student.studentId}">#</td>
-            <td th:text="${student.firstName}">Nombres</td>
-            <td th:text="${student.lastName}">Apellidos</td>
-            <td th:text="${student.email}">Email</td>
-            <td>
-              <a
-                th:href="@{/students/update/{id}(id=${student.studentId})}"
-                class="btn btn-info"
-                >Editar</a
-              >
-              <a
-                th:href="@{/students/delete/{id}(id=${student.studentId})}"
-                class="btn btn-danger"
-                >Eliminar</a
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <div class="form-group m-2">
+              <label class="form-label"
+                >Apellidos:
+                <input
+                  type="text"
+                  th:field="*{lastName}"
+                  class="form-control"
+                  placeholder="Digite su apellido"
+                  required
+                />
+              </label>
+            </div>
+
+            <div class="form-group m-2">
+              <label class="form-label"
+                >Correo:
+                <input
+                  type="email"
+                  th:field="*{email}"
+                  class="form-control"
+                  placeholder="Digite su email"
+                  required
+                />
+              </label>
+            </div>
+            <button class="btn btn-success">Agregar</button>
+          </fieldset>
+        </form>
+      </section>
+      <section class="col-sm-12 col-md-6">
+        <fieldset>
+          <legend>Lista de estudiantes</legend>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Documento</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Email</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="student : ${students}">
+                <td scope="row" th:text="${student.document}">Documento</td>
+                <td th:text="${student.firstName}">Nombres</td>
+                <td th:text="${student.lastName}">Apellidos</td>
+                <td th:text="${student.email}">Email</td>
+                <td>
+                  <a
+                    th:href="@{/students/update/{id}(id=${student.id})}"
+                    class="btn btn-info"
+                    >Editar</a
+                  >
+                  <a
+                    th:href="@{/students/delete/{id}(id=${student.id})}"
+                    class="btn btn-danger"
+                    >Eliminar</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+      </section>
     </div>
   </body>
 </html>

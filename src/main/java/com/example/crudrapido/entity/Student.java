@@ -10,7 +10,10 @@ import lombok.Data;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long studentId;
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String document;
 
     private String firstName;
     private String lastName;
