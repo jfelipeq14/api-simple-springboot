@@ -63,14 +63,20 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/students/search/{document}")
-    public String searchStudent(@PathVariable String document, Model model) {
+    @PostMapping("/students/search")
+    public String searchStudent(@ModelAttribute("student") Student student, Model model) {
+        Student studentEmpty = new Student();
         try {
-            Student student = studentService.getStudentByDocument(document);
-            model.addAttribute("student", student);
-            return "students";
+            Student findStudent = studentService.getStudentByDocument(student.getDocument());
+            if (findStudent != studentEmpty) {
+                model.addAttribute("student", findStudent);
+                return "students";
+            } else {
+                return "students";
+            }
         } catch (Exception e) {
-            return ("Error: " + e);
+            // return ("Error: " + e);
+            return "students";
         }
     }
 
