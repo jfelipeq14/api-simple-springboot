@@ -33,22 +33,18 @@ public class StudentController {
 
     @PostMapping("/students")
     public String saveOrUpdateStudent(@ModelAttribute("student") Student student) {
+        Student studentExist = studentService.getStudent(student.getId());
         try {
-            Student studentExist = studentService.getStudent(student.getId());
-            if (studentExist.getId() != null) {
-                studentExist.setDocument(student.getDocument());
-                studentExist.setFirstName(student.getFirstName());
-                studentExist.setLastName(student.getLastName());
-                studentExist.setEmail(student.getEmail());
+            studentExist.setDocument(student.getDocument());
+            studentExist.setFirstName(student.getFirstName());
+            studentExist.setLastName(student.getLastName());
+            studentExist.setEmail(student.getEmail());
 
-                studentService.saveOrUpdate(studentExist);
-            } else {
-                studentService.saveOrUpdate(student);
-            }
-
+            studentService.saveOrUpdate(studentExist);
             return "redirect:/students";
         } catch (Exception e) {
-            return ("Error: " + e);
+            studentService.saveOrUpdate(student);
+            return "redirect:/students";
         }
     }
 
@@ -70,10 +66,10 @@ public class StudentController {
             Student findStudent = studentService.getStudentByDocument(student.getDocument());
             if (findStudent != studentEmpty) {
                 model.addAttribute("student", findStudent);
-                return "students";
             } else {
-                return "students";
+                model.addAttribute("student", studentEmpty);
             }
+            return "students";
         } catch (Exception e) {
             // return ("Error: " + e);
             return "students";
